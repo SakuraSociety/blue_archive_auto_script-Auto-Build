@@ -1,0 +1,25 @@
+name: python compile(Windows)
+
+on:
+  release:
+    types: [ published ]
+  push:
+    branches:
+      - master
+
+jobs:
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies & Compile exe
+        run:  ./build.bat
+      - name: upload exe
+        uses: actions/upload-artifact@master
+        with:
+          name: blue_archive_auto_script
+          path: dist/
