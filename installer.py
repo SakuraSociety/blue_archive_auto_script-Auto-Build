@@ -27,6 +27,23 @@ formatter = logging.Formatter("%(asctime)s - %(levelname)s: %(message)s")
 console.setFormatter(formatter)
 logger.addHandler(console)
 
+def is_git_installed():
+    return shutil.which("git") is not None
+
+def get_git_executable_path():
+    git_executable = shutil.which("git")
+    if git_executable:
+        return os.path.abspath(git_executable)
+    else:
+        return None
+
+if __name__ == "__main__":
+    if is_git_installed():
+        print("Git is installed.")
+        git_path = get_git_executable_path()
+        print(f"Git executable path: {git_path}")
+    else:
+        print("Git is not installed.")
 
 def mv_repo(folder_path: str):
     for item in os.listdir(folder_path):
@@ -159,6 +176,11 @@ def check_atx():
 
 def check_git():
     logger.info("Checking git installation...")
+    if is_git_installed():
+        print("System Git is installed.")
+        GIT_HOME = get_git_executable_path()
+    else:
+        print(f"System Git is no installed. We will use {GIT_HOME}, check if there is git under this path to prevent errors")
     if not os.path.exists('./.git'):
         logger.info("+--------------------------------+")
         logger.info("|         INSTALL BAAS           |")
